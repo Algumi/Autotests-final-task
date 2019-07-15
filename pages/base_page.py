@@ -1,8 +1,9 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class BasePage(object):
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser: WebDriver, url, timeout=10):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
