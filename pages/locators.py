@@ -4,10 +4,16 @@ from selenium.webdriver.common.by import By
 class BasePageLocators(object):
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    BASKET_LINK = (By.XPATH, '//a[contains(@class, "btn") and contains(@href, "basket") and contains(., "basket")]')
 
 
 class MainPageLocators(object):
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+
+
+class CartPageLocators(object):
+    EMPTY_BASKET_MESSAGE = (By.XPATH, '//div[@id = "content_inner" and contains(., "Your basket is empty")]')
+    ITEMS_ADDED_TO_BASKET = (By.CSS_SELECTOR, ".basket-items")
 
 
 class LoginPageLocators(object):
