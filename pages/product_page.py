@@ -33,3 +33,11 @@ class ProductPage(BasePage):
 
     def get_product_price_on_page(self):
         return self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.ADDED_TO_BASKET_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def success_message_should_disappear(self):
+        assert self.is_disappeared(*ProductPageLocators.ADDED_TO_BASKET_MESSAGE), \
+            "Success message is presented, but should not be"
