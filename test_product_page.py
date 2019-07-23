@@ -1,25 +1,46 @@
 from pages.product_page import ProductPage
 from pages.login_page import LoginPage
 from pages.cart_page import CartPage
+import pytest
+import time
 
 
-def test_guest_can_add_product_to_cart(browser):
-    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
-    page = ProductPage(browser, link)
-    page.open()
-    page.click_on_add_to_basket_button()
-    page.solve_quiz_and_get_code()
+@pytest.mark.registered_user
+class TestUserAddToCartFromProductPage(object):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        test_email = str(time.time()) + "@fakemail.org"
+        test_password = "test12345_TEST"
+        page = LoginPage(browser, link)
+        page.open()
+        self.browser = browser
+        self.register_new_user(test_email, test_password)
+        page.should_be_authorized_user()
 
-    page.check_messages_after_adding_to_basket()
-    page.check_product_name_in_added_message(page.get_product_name_from_header())
-    page.check_basket_total_in_basket_message(page.get_product_price_on_page())
+    def register_new_user(self, email, password):
+        page = LoginPage(self.browser, self.browser.current_url)
+        page.enter_email_for_registration(email)
+        page.enter_password1_for_registration(password)
+        page.enter_password2_for_registration(password)
+        page.click_on_register_button()
 
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
 
-def test_guest_cant_see_success_message(browser):
-    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
-    page = ProductPage(browser, link)
-    page.open()
-    page.should_not_be_success_message()
+    def test_user_can_add_product_to_cart(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+        page = ProductPage(browser, link)
+        page.open()
+        page.click_on_add_to_basket_button()
+        page.solve_quiz_and_get_code()
+
+        page.check_messages_after_adding_to_basket()
+        page.check_product_name_in_added_message(page.get_product_name_from_header())
+        page.check_basket_total_in_basket_message(page.get_product_price_on_page())
 
 
 def test_guest_should_see_login_link_on_product_page(browser):
