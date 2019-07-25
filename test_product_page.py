@@ -15,15 +15,9 @@ class TestUserAddToCartFromProductPage(object):
         page = LoginPage(browser, link)
         page.open()
         self.browser = browser
-        self.register_new_user(test_email, test_password)
+        page.register_new_user(test_email, test_password)
         page.should_be_authorized_user()
-
-    def register_new_user(self, email, password):
-        page = LoginPage(self.browser, self.browser.current_url)
-        page.enter_email_for_registration(email)
-        page.enter_password1_for_registration(password)
-        page.enter_password2_for_registration(password)
-        page.click_on_register_button()
+        time.sleep(10)
 
     def test_user_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
